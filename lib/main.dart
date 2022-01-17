@@ -5,9 +5,10 @@ import 'package:ondemandservices/controller/onbordmodel/onbordcontroller.dart';
 import 'package:ondemandservices/view/homePage/homepage.dart';
 import 'package:ondemandservices/view/mainPage.dart';
 import 'package:ondemandservices/view/onboardPage/onboard.dart';
+import 'package:ondemandservices/view/registerPage/registerPage.dart';
+import 'package:ondemandservices/view/verifyotp/verifyotp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'consts/theme.dart';
-
 
 void main() {
   runApp(
@@ -29,9 +30,10 @@ class MyApp extends StatelessWidget {
     final controller = Get.find<OnboardController>();
     controller.isAlreadyComplate();
 
-    return GetBuilder<OnboardController>(builder: (controller) {
-      return controller.complateonboard == true ? MainPage() : OnBoardPage();
-    },
+    return GetBuilder<OnboardController>(
+      builder: (controller) {
+        return controller.complateonboard == true ? MainPage() : OnBoardPage();
+      },
     );
   }
 }

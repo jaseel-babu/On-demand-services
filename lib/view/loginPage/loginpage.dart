@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import 'package:ondemandservices/view/verifyotp/verifyotp.dart';
 
 class LoginwithMobile extends StatelessWidget {
-  const LoginwithMobile({Key? key}) : super(key: key);
-
+  LoginwithMobile({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController mobileNoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final oriantion = MediaQuery.of(context).orientation;
@@ -15,7 +16,7 @@ class LoginwithMobile extends StatelessWidget {
       body: SafeArea(
         child: oriantion == Orientation.portrait || maxWidth <= 640
             ? SingleChildScrollView(
-                physics: const ScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: SizedBox(
                   width: maxWidth,
                   height: maxHeight,
@@ -27,19 +28,22 @@ class LoginwithMobile extends StatelessWidget {
                   ),
                 ),
               )
-            : SizedBox(
-                width: maxWidth,
-                height: maxHeight,
-                child: Row(
-                  children: [
-                    loginimg(maxHeight),
-                    Expanded(
-                      child: SizedBox(
-                        height: maxHeight / 1.2,
-                        child: field(context, maxWidth),
+            : SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: SizedBox(
+                  width: maxWidth,
+                  height: maxHeight,
+                  child: Row(
+                    children: [
+                      loginimg(maxHeight),
+                      Expanded(
+                        child: SizedBox(
+                          height: maxHeight / 1.2,
+                          child: field(context, maxWidth),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
       ),
@@ -67,16 +71,28 @@ class LoginwithMobile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: Material(
-              elevation: 10.0,
-              shadowColor: Colors.grey,
-              child: TextFormField(
-                maxLength: 10,
-                decoration: InputDecoration(
-                  focusedBorder: InputBorder.none,
-                  fillColor: AppColors.bgColor,
-                  filled: true,
-                  border: const OutlineInputBorder(borderSide: BorderSide.none),
+            child: Form(
+              key: _formKey,
+              child: Material(
+                elevation: 10.0,
+                shadowColor: Colors.grey,
+                child: TextFormField(
+                  controller: mobileNoController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Your Mobile Number";
+                    } else if (value.length != 10) {
+                      return "Enter Valid Mobile Number";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    fillColor: AppColors.bgColor,
+                    filled: true,
+                    border:
+                        const OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
                 ),
               ),
             ),
@@ -85,7 +101,9 @@ class LoginwithMobile extends StatelessWidget {
             width: maxWidth / 1.4,
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => VerifyOtp());
+                if (_formKey.currentState!.validate()) {
+                  Get.to(() => VerifyOtp());
+                }
               },
               child: const Text("Login With Otp"),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ondemandservices/consts/theme.dart';
 import 'package:ondemandservices/main.dart';
 import 'package:ondemandservices/view/mainPage.dart';
+import 'package:ondemandservices/view/registerPage/registerPage.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:get/get.dart';
 
@@ -14,27 +15,74 @@ class VerifyOtp extends StatelessWidget {
     final maxWidth = MediaQuery.of(context).size.width;
     final maxHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: oriantion == Orientation.portrait || maxWidth <= 640
-              ? SingleChildScrollView(
+        child: oriantion == Orientation.portrait || maxWidth <= 640
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       imgpart(context, maxHeight),
                       fieldpath(context, maxWidth),
                     ],
                   ),
-                )
-              : Row(
-                  children: [
-                    imgpart(context, maxWidth / 1.5),
-                    fieldpath(context, maxWidth / 2),
-                  ],
                 ),
-        ),
+              )
+            : landscapeMode(context, maxHeight, maxWidth),
       ),
+    );
+  }
+
+  Row landscapeMode(BuildContext context, double maxHeight, double maxWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        imgpart(context, maxHeight * 1.2),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Enter 6 digits verification code",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ],
+            ),
+            Container(
+              width: maxWidth / 1.5,
+              height: maxHeight / 4,
+              child: PinInputTextField(
+                controller: _pinEditingController,
+                decoration: BoxLooseDecoration(
+                  strokeColorBuilder: PinListenColorBuilder(
+                    AppColors.iconColor,
+                    Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                width: maxWidth / 2,
+                child: ElevatedButton(
+                    onPressed: () {
+                      _pinEditingController.text.length != 6
+                          ? Get.snackbar("Invalid", "Please Enter Valid Otp",
+                              snackPosition: SnackPosition.BOTTOM)
+                          : Get.to(() => RegisterPage());
+                    },
+                    child: const Text("Verify")),
+              ),
+            ),
+            Center(
+                child: TextButton(
+                    onPressed: () {}, child: const Text("Resend Otp")))
+          ],
+        )
+      ],
     );
   }
 
@@ -65,12 +113,14 @@ class VerifyOtp extends StatelessWidget {
                   _pinEditingController.text.length != 6
                       ? Get.snackbar("Invalid", "Please Enter Valid Otp",
                           snackPosition: SnackPosition.BOTTOM)
-                      : Get.to(() => MainPage());
+                      : Get.to(() => RegisterPage());
                 },
                 child: const Text("Verify")),
           ),
         ),
-        Center(child: TextButton(onPressed: () {}, child: Text("Resend Otp")))
+        Center(
+          child: TextButton(onPressed: () {}, child: const Text("Resend Otp")),
+        )
       ],
     );
   }
