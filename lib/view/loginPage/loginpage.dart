@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ondemandservices/consts/theme.dart';
 import 'package:get/get.dart';
+import 'package:ondemandservices/services/apiservice.dart';
 import 'package:ondemandservices/view/verifyotp/verifyotp.dart';
 
 class LoginwithMobile extends StatelessWidget {
   LoginwithMobile({Key? key}) : super(key: key);
+  ApiManager apiManager = ApiManager();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController mobileNoController = TextEditingController();
   @override
@@ -98,16 +102,24 @@ class LoginwithMobile extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: maxWidth / 1.4,
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Get.to(() => VerifyOtp());
-                }
-              },
-              child: const Text("Login With Otp"),
-            ),
-          )
+                  width: maxWidth / 1.4,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      if (_formKey.currentState!.validate()) {
+                        Timer(Duration(seconds: 2), ()async {  var otpSend =await apiManager.mobileotp(
+                            mobileNumber: mobileNoController.text);
+                        if (otpSend == true) {
+                          Get.off(() => VerifyOtp());
+                        } print("something wrong");});
+                      
+
+                       
+                      }
+                    },
+                    child: const Text("Login With Otp"),
+                  ),
+                )
+              
         ],
       ),
     );

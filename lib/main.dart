@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondemandservices/controller/apicontroller.dart';
 import 'package:ondemandservices/controller/bottambarController.dart/bottambarController.dart';
 import 'package:ondemandservices/controller/onbordmodel/onbordcontroller.dart';
 import 'package:ondemandservices/view/homePage/homepage.dart';
@@ -11,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'consts/theme.dart';
 
 void main() {
+  
+
   runApp(
     GetMaterialApp(
       home: MyApp(),
@@ -27,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(OnboardController());
     Get.put(BottamBarController());
+      Get.put(apiController());
     final controller = Get.find<OnboardController>();
     controller.isAlreadyComplate();
 

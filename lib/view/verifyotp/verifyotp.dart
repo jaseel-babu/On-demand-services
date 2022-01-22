@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ondemandservices/consts/theme.dart';
+import 'package:ondemandservices/controller/apicontroller.dart';
 import 'package:ondemandservices/main.dart';
 import 'package:ondemandservices/view/mainPage.dart';
 import 'package:ondemandservices/view/registerPage/registerPage.dart';
@@ -11,6 +12,8 @@ class VerifyOtp extends StatelessWidget {
   TextEditingController _pinEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<apiController>();
+    print(controller.otpSend);
     final oriantion = MediaQuery.of(context).orientation;
     final maxWidth = MediaQuery.of(context).size.width;
     final maxHeight = MediaQuery.of(context).size.height;
